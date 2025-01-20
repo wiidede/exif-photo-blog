@@ -43,14 +43,14 @@ export type AiImageQuery =
   'description-semantic';
 
 export const AI_IMAGE_QUERIES: Record<AiImageQuery, string> = {
-  'title': 'Write a compelling title for this image in 3 words or less',
-  'caption': 'Write a pithy caption for this image in 6 words or less and no punctuation',
-  'title-and-caption': 'Write a compelling title and pithy caption of 8 words or less for this image, using the format Title: "title" Caption: "caption"',
-  'tags': 'Describe this image three or less comma-separated keywords with no adjective or adverbs',
-  'description-small': 'Describe this image succinctly without the initial text "This image shows" or "This is a picture of"',
-  'description': 'Describe this image',
-  'description-large': 'Describe this image in detail',
-  'description-semantic': 'List up to 5 things in this image without description as a comma-separated list',
+  'title': '为这张图片写一个吸引人的标题，不超过 3 个词',
+  'caption': '为这张图片写一个简洁的说明，不超过 6 个词，且不含标点符号',
+  'title-and-caption': '为这张图片写一个吸引人的标题和简洁的说明，总字数不超过 8 个，使用格式：Title: "标题" Caption: "说明"',
+  'tags': '用不超过 3 个逗号（,）分隔的关键词描述这张图片，不使用形容词或副词',
+  'description-small': '简洁地描述这张图片，开头不用 "这张图片展示了" 或 "这是一张关于……的图片"',
+  'description': '描述这张图片',
+  'description-large': '详细地描述这张图片',
+  'description-semantic': '以逗号（,）分隔的列表形式列出这张图片中的多达 5 个元素，无需描述',
 };
 
 export const parseTitleAndCaption = (text: string) => {
