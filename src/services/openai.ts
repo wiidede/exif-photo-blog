@@ -1,6 +1,6 @@
 import { generateText, streamText } from 'ai';
 import { createStreamableValue } from 'ai/rsc';
-import { createOpenAI } from '@ai-sdk/openai';
+import { createGoogleGenerativeAI } from '@ai-sdk/google';
 import { kv } from '@vercel/kv';
 import { Ratelimit } from '@upstash/ratelimit';
 import { AI_TEXT_GENERATION_ENABLED, HAS_VERCEL_KV } from '@/site/config';
@@ -9,11 +9,10 @@ import { cleanUpAiTextResponse } from '@/photo/ai';
 
 const RATE_LIMIT_IDENTIFIER = 'openai-image-query';
 const RATE_LIMIT_MAX_QUERIES_PER_HOUR = 100;
-const MODEL = process.env.OPENAI_MODEL || 'gpt-4o';
+const MODEL = process.env.OPENAI_MODEL || 'gemini-1.5-flash';
 
 const openai = AI_TEXT_GENERATION_ENABLED
-  ? createOpenAI({
-    baseURL: process.env.OPENAI_BASE_URL,
+  ? createGoogleGenerativeAI({
     apiKey: process.env.OPENAI_SECRET_KEY,
   })
   : undefined;
