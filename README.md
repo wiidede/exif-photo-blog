@@ -67,6 +67,7 @@ _⚠️ READ BEFORE PROCEEDING_
 1. Setup OpenAI
    - If you don't already have one, create an [OpenAI](https://openai.com) account and fund it (see [this thread](https://github.com/sambecker/exif-photo-blog/issues/110) if you're having issues)
    - Generate an API key and store in environment variable `OPENAI_SECRET_KEY`
+   - (Optional) Setup `OPENAI_BASE_URL` and `OPENAI_MODEL`
    - Setup usage limits to avoid unexpected charges (_recommended_)
 2. Add rate limiting (_recommended_)
    - As an additional precaution, create a [Vercel KV](https://vercel.com/docs/storage/vercel-kv/quickstart#create-a-kv-database) store and link it to your project in order to enable rate limiting—no further configuration necessary
