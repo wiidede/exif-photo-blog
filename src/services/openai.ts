@@ -33,7 +33,6 @@ const ai = AI_TEXT_GENERATION_ENABLED
     apiKey: process.env.GEMINI_SECRET_KEY,
   })
   : undefined;
-console.log(AI_TEXT_GENERATION_ENABLED, ai);
 
 
 const ratelimit = HAS_VERCEL_KV
@@ -64,7 +63,6 @@ export const generateOpenAiImageAnalysis = async (
   imageBase64: string,
 ) => {
   await checkRateLimitAndBailIfNecessary();
-  console.log('Generating AI image analysis', ai);
   if (!ai) {
     return {
       title: '',
@@ -100,7 +98,6 @@ export const generateOpenAiImageAnalysis = async (
 
 export const testOpenAiConnection = async () => {
   await checkRateLimitAndBailIfNecessary();
-
   if (ai) {
     return generateText({
       model: ai(MODEL),
