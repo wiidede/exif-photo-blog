@@ -7,24 +7,22 @@ import { removeBase64Prefix } from '@/utility/image';
 import { cleanUpAiTextResponse } from '@/photo/ai';
 import { z } from 'zod';
 
-/* eslint-disable max-len */
-
 const RATE_LIMIT_IDENTIFIER = 'openai-image-query';
 const RATE_LIMIT_MAX_QUERIES_PER_HOUR = 100;
 const MODEL = process.env.OPENAI_MODEL || 'gemini-1.5-flash';
 
 export const imageAnalysisSchema = z.object({
-  title: z.string().max(30).describe('A concise title for the image in 3 words or less'),
-  caption: z.string().max(60).describe('A brief caption for the image in 6 words or less, without punctuation'),
-  tags: z.array(z.string()).max(3).describe('Up to 3 keywords describing the image, avoiding adjectives and adverbs'),
-  semanticDescription: z.string().describe('A brief description of the image without introductory phrases'),
+  title: z.string().max(20).describe('为图片生成一个不超过20个字的简洁标题'),
+  caption: z.string().max(30).describe('用不超过6个词描述图片要点，无需标点符号'),
+  tags: z.array(z.string()).max(4).describe('最多3个关键词标签，用于描述图片主要元素，避免使用形容词和副词'),
+  semanticDescription: z.string().describe('简要描述图片内容，直接描述要点，无需引导性语句'),
 });
 
-export const AI_IMAGE_PROMPT = 'Analyze this image and provide the following details in JSON format:\n' +
-  '- A concise title in 3 words or less\n' +
-  '- A brief caption in 6 words or less without punctuation\n' +
-  '- Up to 3 keywords describing key elements, avoiding adjectives and adverbs\n' +
-  '- A brief semantic description without introductory phrases';
+export const AI_IMAGE_PROMPT = '请分析这张图片并以JSON格式提供以下信息：\n' +
+  '- 一个不超过不超过20个字的简洁标题\n' +
+  '- 用不超过6个词描述图片要点，无需标点符号\n' +
+  '- 最多3个关键词标签，用于描述主要元素（避免形容词和副词）\n' +
+  '- 简要直接地描述图片内容，无需引导性语句';
 
 export type ImageAnalysis = z.infer<typeof imageAnalysisSchema>;
 
