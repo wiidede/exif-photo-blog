@@ -1,8 +1,20 @@
-# 📷 `EXIF` Photo Blog
+# 的的的相册 🏞️
 
-相较于原本的更新
+fork from [exif-photo-blog](https://github.com/sambecker/exif-photo-blog)
 
-1. using gemini and generate description in one time
+## 改动
+
+1. ai生成介绍使用gemini
+2. ai生成介绍使用结构化输出
+3. ai生成介绍仅请求一次ai接口
+
+## 网站
+
+[「的的的相册 🏞️」](https://photo.wiidede.space/)
+
+---
+
+## 📷 `EXIF` Photo Blog
 
 https://github.com/sambecker/exif-photo-blog/assets/169298/4253ea54-558a-4358-8834-89943cfbafb4
 
