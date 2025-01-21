@@ -1,21 +1,40 @@
-import { generateText, streamText } from 'ai';
-import { createStreamableValue } from 'ai/rsc';
+import { generateObject, generateText } from 'ai';
 import { createGoogleGenerativeAI } from '@ai-sdk/google';
 import { kv } from '@vercel/kv';
 import { Ratelimit } from '@upstash/ratelimit';
 import { AI_TEXT_GENERATION_ENABLED, HAS_VERCEL_KV } from '@/site/config';
 import { removeBase64Prefix } from '@/utility/image';
 import { cleanUpAiTextResponse } from '@/photo/ai';
+import { z } from 'zod';
+
+/* eslint-disable max-len */
 
 const RATE_LIMIT_IDENTIFIER = 'openai-image-query';
 const RATE_LIMIT_MAX_QUERIES_PER_HOUR = 100;
 const MODEL = process.env.OPENAI_MODEL || 'gemini-1.5-flash';
 
-const openai = AI_TEXT_GENERATION_ENABLED
+export const imageAnalysisSchema = z.object({
+  title: z.string().max(30).describe('A concise title for the image in 3 words or less'),
+  caption: z.string().max(60).describe('A brief caption for the image in 6 words or less, without punctuation'),
+  tags: z.array(z.string()).max(3).describe('Up to 3 keywords describing the image, avoiding adjectives and adverbs'),
+  semanticDescription: z.string().describe('A brief description of the image without introductory phrases'),
+});
+
+export const AI_IMAGE_PROMPT = 'Analyze this image and provide the following details in JSON format:\n' +
+  '- A concise title in 3 words or less\n' +
+  '- A brief caption in 6 words or less without punctuation\n' +
+  '- Up to 3 keywords describing key elements, avoiding adjectives and adverbs\n' +
+  '- A brief semantic description without introductory phrases';
+
+export type ImageAnalysis = z.infer<typeof imageAnalysisSchema>;
+
+const ai = AI_TEXT_GENERATION_ENABLED
   ? createGoogleGenerativeAI({
-    apiKey: process.env.OPENAI_SECRET_KEY,
+    apiKey: process.env.GEMINI_SECRET_KEY,
   })
   : undefined;
+console.log(AI_TEXT_GENERATION_ENABLED, ai);
+
 
 const ratelimit = HAS_VERCEL_KV
   ? new Ratelimit({
@@ -41,71 +60,50 @@ const checkRateLimitAndBailIfNecessary = async () => {
   }
 };
 
-const getImageTextArgs = (
+export const generateOpenAiImageAnalysis = async (
   imageBase64: string,
-  query: string,
-): (
-  Parameters<typeof streamText>[0] &
-  Parameters<typeof generateText>[0]
-) | undefined => openai ? {
-  model: openai(MODEL),
-  messages: [{
-    'role': 'user',
-    'content': [
-      {
-        'type': 'text',
-        'text': query,
-      }, {
-        'type': 'image',
-        'image': removeBase64Prefix(imageBase64),
-      },
-    ],
-  }],
-} : undefined;
-
-export const streamOpenAiImageQuery = async (
-  imageBase64: string,
-  query: string,
 ) => {
   await checkRateLimitAndBailIfNecessary();
-
-  const stream = createStreamableValue('');
-
-  const args = getImageTextArgs(imageBase64, query);
-
-  if (args) {
-    (async () => {
-      const { textStream } = await streamText(args);
-      for await (const delta of textStream) {
-        stream.update(cleanUpAiTextResponse(delta));
-      }
-      stream.done();
-    })();
+  console.log('Generating AI image analysis', ai);
+  if (!ai) {
+    return {
+      title: '',
+      caption: '',
+      tags: [],
+      semanticDescription: '',
+    };
   }
+  const { object } = await generateObject({
+    model: ai(MODEL),
+    schema: imageAnalysisSchema,
+    messages: [{
+      'role': 'user',
+      'content': [
+        {
+          'type': 'text',
+          'text': AI_IMAGE_PROMPT,
+        }, {
+          'type': 'image',
+          'image': removeBase64Prefix(imageBase64),
+        },
+      ],
+    }],
+  });
 
-  return stream.value;
-};
-
-export const generateOpenAiImageQuery = async (
-  imageBase64: string,
-  query: string,
-) => {
-  await checkRateLimitAndBailIfNecessary();
-
-  const args = getImageTextArgs(imageBase64, query);
-
-  if (args) {
-    return generateText(args)
-      .then(({ text }) => cleanUpAiTextResponse(text));
-  }
+  return {
+    title: cleanUpAiTextResponse(object.title),
+    caption: cleanUpAiTextResponse(object.caption),
+    tags: object.tags.map(tag => cleanUpAiTextResponse(tag)),
+    semanticDescription: cleanUpAiTextResponse(object.semanticDescription),
+  };
 };
 
 export const testOpenAiConnection = async () => {
   await checkRateLimitAndBailIfNecessary();
 
-  if (openai) {
+  if (ai) {
     return generateText({
-      model: openai(MODEL),
+      model: ai(MODEL),
       messages: [{
         'role': 'user',
         'content': [

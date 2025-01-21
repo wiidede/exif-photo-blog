@@ -2,8 +2,7 @@
 
 相较于原本的更新
 
-1. 支持 ai baseurl 和 model
-2. ai生成中文描述
+1. using gemini and generate description in one time
 
 https://github.com/sambecker/exif-photo-blog/assets/169298/4253ea54-558a-4358-8834-89943cfbafb4
 
@@ -71,8 +70,7 @@ _⚠️ READ BEFORE PROCEEDING_
 
 1. Setup OpenAI
    - If you don't already have one, create an [OpenAI](https://openai.com) account and fund it (see [this thread](https://github.com/sambecker/exif-photo-blog/issues/110) if you're having issues)
-   - Generate an API key and store in environment variable `OPENAI_SECRET_KEY`
-   - (Optional) Setup `OPENAI_BASE_URL` and `OPENAI_MODEL`
+   - Generate an API key and store in environment variable `GEMINI_SECRET_KEY`
    - Setup usage limits to avoid unexpected charges (_recommended_)
 2. Add rate limiting (_recommended_)
    - As an additional precaution, create a [Vercel KV](https://vercel.com/docs/storage/vercel-kv/quickstart#create-a-kv-database) store and link it to your project in order to enable rate limiting—no further configuration necessary

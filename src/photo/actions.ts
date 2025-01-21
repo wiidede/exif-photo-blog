@@ -37,14 +37,12 @@ import { blurImageFromUrl, extractImageDataFromBlobPath } from './server';
 import { TAG_FAVS, isTagFavs } from '@/tag';
 import { convertPhotoToPhotoDbInsert, Photo } from '.';
 import { runAuthenticatedAdminServerAction } from '@/auth';
-import { AI_IMAGE_QUERIES, AiImageQuery } from './ai';
-import { streamOpenAiImageQuery } from '@/services/openai';
+import { generateOpenAiImageAnalysis } from '@/services/openai';
 import {
-  AI_TEXT_AUTO_GENERATED_FIELDS,
   AI_TEXT_GENERATION_ENABLED,
   BLUR_ENABLED,
 } from '@/site/config';
-import { generateAiImageQueries } from './ai/server';
+import { generateAiImageQuery } from './ai/server';
 import { createStreamableValue } from 'ai/rsc';
 import { convertUploadToPhoto } from './storage';
 import { UrlAddStatus } from '@/admin/AdminUploadsClient';
@@ -64,7 +62,7 @@ export const createPhotoAction = async (formData: FormData) =>
       urlOrigin: photo.url,
       shouldStripGpsData,
     });
-    
+
     if (updatedUrl) {
       photo.url = updatedUrl;
       await insertPhoto(photo);
@@ -134,9 +132,8 @@ export const addAllUploadsAction = async ({
               caption,
               tags: aiTags,
               semanticDescription,
-            } = await generateAiImageQueries(
+            } = await generateAiImageQuery(
               imageResizedBase64,
-              AI_TEXT_AUTO_GENERATED_FIELDS,
             );
 
             const form: Partial<PhotoFormData> = {
@@ -353,9 +350,8 @@ export const syncPhotoAction = async (photoId: string) =>
           caption: aiCaption,
           tags: aiTags,
           semanticDescription: aiSemanticDescription,
-        } = await generateAiImageQueries(
+        } = await generateAiImageQuery(
           imageResizedBase64,
-          AI_TEXT_AUTO_GENERATED_FIELDS,
         );
 
         const photoFormDbInsert = convertFormDataToPhotoDbInsert({
@@ -390,12 +386,11 @@ export const syncPhotosAction = async (photoIds: string[]) =>
 export const clearCacheAction = async () =>
   runAuthenticatedAdminServerAction(revalidateAllKeysAndPaths);
 
-export const streamAiImageQueryAction = async (
+export const AiImageQueryAction = async (
   imageBase64: string,
-  query: AiImageQuery,
 ) =>
   runAuthenticatedAdminServerAction(() =>
-    streamOpenAiImageQuery(imageBase64, AI_IMAGE_QUERIES[query]));
+    generateOpenAiImageAnalysis(imageBase64));
 
 export const getImageBlurAction = async (url: string) =>
   runAuthenticatedAdminServerAction(() => blurImageFromUrl(url));
