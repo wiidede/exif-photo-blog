@@ -2,17 +2,17 @@ import { parseISO, parse, format } from 'date-fns';
 import { formatInTimeZone } from 'date-fns-tz';
 import { Timezone } from './timezone';
 
-const DATE_STRING_FORMAT_TINY               = 'dd MMM yy';
-const DATE_STRING_FORMAT_TINY_PLACEHOLDER   = '00 000 00';
+const DATE_STRING_FORMAT_TINY               = 'yy-MM-dd';
+const DATE_STRING_FORMAT_TINY_PLACEHOLDER   = '00-00-00';
 
-const DATE_STRING_FORMAT_SHORT              = 'dd MMM yyyy';
-const DATE_STRING_FORMAT_SHORT_PLACEHOLDER  = '00 000 0000';
+const DATE_STRING_FORMAT_SHORT              = 'yy-MM-dd HH';
+const DATE_STRING_FORMAT_SHORT_PLACEHOLDER  = '00-00-00 00';
 
-const DATE_STRING_FORMAT_MEDIUM             = 'dd MMM yy h:mma';
-const DATE_STRING_FORMAT_MEDIUM_PLACEHOLDER = '00 000 00 00:0000';
+const DATE_STRING_FORMAT_MEDIUM             = 'yyyy-MM-dd HH:mm';
+const DATE_STRING_FORMAT_MEDIUM_PLACEHOLDER = '0000-00-00 00:00';
 
-const DATE_STRING_FORMAT_LONG               = 'dd MMM yyyy h:mma';
-const DATE_STRING_FORMAT_LONG_PLACEHOLDER   = '00 000 0000 00:0000';
+const DATE_STRING_FORMAT_LONG               = 'yyyy-MM-dd HH:mm:ss';
+const DATE_STRING_FORMAT_LONG_PLACEHOLDER   = '0000-00-00 00:00:00';
 
 const DATE_STRING_FORMAT_POSTGRES           = 'yyyy-MM-dd HH:mm:ss';
 

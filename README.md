@@ -7,6 +7,7 @@ fork from [exif-photo-blog](https://github.com/sambecker/exif-photo-blog)
 1. ai生成介绍使用gemini
 2. ai生成介绍使用结构化输出
 3. ai生成介绍仅请求一次ai接口
+4. 时间格式 yyyy-MM-dd HH:mm:ss
 
 ## 网站
 
