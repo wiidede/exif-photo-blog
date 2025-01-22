@@ -1,17 +1,15 @@
-# 的的的相册 🏞️
+# 的的的照片墙 🏞️
 
-fork from [exif-photo-blog](https://github.com/sambecker/exif-photo-blog)
+## 网站
 
-## 改动
+[「的的的照片墙 🏞️」](https://photo.wiidede.space/)
+
+## 改动 相较于 [exif-photo-blog](https://github.com/sambecker/exif-photo-blog)
 
 1. ai生成介绍使用gemini
 2. ai生成介绍使用结构化输出
 3. ai生成介绍仅请求一次ai接口
-4. 时间格式 yyyy-MM-dd HH:mm:ss
-
-## 网站
-
-[「的的的相册 🏞️」](https://photo.wiidede.space/)
+4. 时间格式改为 yyyy-MM-dd HH:mm:ss
 
 ---
 
