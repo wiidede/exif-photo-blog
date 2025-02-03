@@ -110,6 +110,9 @@ importers:
       viewerjs:
         specifier: ^1.11.7
         version: 1.11.7
+      zod:
+        specifier: ^3.24.1
+        version: 3.24.1
     devDependencies:
       '@next/bundle-analyzer':
         specifier: 15.1.6
